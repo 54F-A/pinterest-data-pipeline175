@@ -2,12 +2,12 @@
 
 ### Table of Contents:
 
-#### [1. Overview: The Project Description](#1-overview-the-project-description)
-#### [2. Installation & Usage Instructions](#2-installation--usage-instructions)
-#### [3. File Structure of the Project](#3-file-structure-of-the-project)
+#### 1. [Overview: The Project Description](#1-overview-the-project-description)
+#### 2. [Installation & Usage Instructions](#2-installation--usage-instructions)
+#### 3. [File Structure of the Project](#3-file-structure-of-the-project)
 - #### [AWSDBConnector](#awsdbconnector)
 - #### [Data Extraction](#data-extraction)
-#### [4. License Information](#4-license-information)
+#### 4. [License Information](#4-license-information)
 
 ---
 
