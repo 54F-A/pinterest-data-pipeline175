@@ -62,6 +62,63 @@ class AWSDBConnector:
 new_connector = AWSDBConnector()
 
 
+
+def post_to_api(data):
+    headers = {'Content-Type': 'application/vnd.kafka.json.v2+json'}
+    invoke_url = "https://6oqdd8f045.execute-api.us-east-1.amazonaws.com/test"
+
+    if "pin" in data:
+        payload = json.dumps({
+            "records": [{     
+                "value": {
+                            "index": data["pin"]["index"], 
+                            "unique_id": data["pin"]["unique_id"],
+                            "title": data["pin"]["title"],
+                            "description": data["pin"]["description"],
+                            "poster_name": data["pin"]["poster_name"],
+                            "follower_count": data["pin"]["follower_count"],
+                            "tag_list": data["pin"]["tag_list"],
+                            "is_image_or_video": data["pin"]["is_image_or_video"],
+                            "image_src": data["pin"]["image_src"],
+                            "downloaded": data["pin"]["downloaded"],
+                            "save_location": data["pin"]["save_location"],
+                            "category": data["pin"]["category"]
+                }
+            }]
+        })
+        response = requests.request("POST", invoke_url, headers=headers, data=payload)
+        print(response.status_code)
+    
+    if "geo" in data:
+        payload = json.dumps({
+            "records": [{     
+                "value": {
+                            "ind": data["geo"]["ind"], 
+                            "timestamp": data["geo"]["timestamp"].strftime("%Y-%m-%d %H:%M:%S") ,
+                            "latitude": data["geo"]["latitude"],
+                            "longitude": data["geo"]["longitude"],
+                            "country": data["geo"]["country"]
+                }
+            }]
+        })
+        response = requests.request("POST", invoke_url, headers=headers, data=payload)
+        print(response.status_code)
+    
+    if "user" in data:
+        payload = json.dumps({
+            "records": [{     
+                "value": {
+                            "ind": data["user"]["ind"], 
+                            "first_name": data["user"]["first_name"],
+                            "last_name": data["user"]["last_name"],
+                            "age": data["user"]["age"],
+                            "date_joined": data["user"]["date_joined"].strftime("%Y-%m-%d %H:%M:%S")
+                }
+            }]
+        })
+        response = requests.request("POST", invoke_url, headers=headers, data=payload)
+        print(response.status_code)
+
 def run_infinite_post_data_loop():
     """Runs infinite loop that selects random rows from multiple database tables and prints them.
     """
@@ -74,27 +131,28 @@ def run_infinite_post_data_loop():
 
             pin_string = text(f"SELECT * FROM pinterest_data LIMIT {random_row}, 1")
             pin_selected_row = connection.execute(pin_string)
-            
+            pin_result = None
+
             for row in pin_selected_row:
                 pin_result = dict(row._mapping)
 
             geo_string = text(f"SELECT * FROM geolocation_data LIMIT {random_row}, 1")
             geo_selected_row = connection.execute(geo_string)
+            geo_result = None
             
             for row in geo_selected_row:
                 geo_result = dict(row._mapping)
 
             user_string = text(f"SELECT * FROM user_data LIMIT {random_row}, 1")
             user_selected_row = connection.execute(user_string)
+            user_result = None
             
             for row in user_selected_row:
                 user_result = dict(row._mapping)
             
-            print(pin_result)
-            print(geo_result)
-            print(user_result)
-
+            data = {"pin": pin_result, "geo": geo_result, "user": user_result}
+            print(data)
+            post_to_api(data)
 
 if __name__ == "__main__":
     run_infinite_post_data_loop()
-    print('Working')
