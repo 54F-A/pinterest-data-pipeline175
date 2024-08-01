@@ -96,7 +96,7 @@ Sends a POST request to the appropriate Kafka topic endpoint with the constructe
 
 ### Post Data to the API:
 
-Runs an infinite loop to select random rows from multiple database tables and posts them to the API.
+Selects random rows from database tables and posts them to the API.
 
 __Method__:
 
