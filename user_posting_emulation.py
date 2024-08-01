@@ -62,12 +62,12 @@ class AWSDBConnector:
 new_connector = AWSDBConnector()
 
 
-
 def post_to_api(data):
     headers = {'Content-Type': 'application/vnd.kafka.json.v2+json'}
-    invoke_url = "https://6oqdd8f045.execute-api.us-east-1.amazonaws.com/test"
+    base_invoke_url = "https://6oqdd8f045.execute-api.us-east-1.amazonaws.com/test"
 
     if "pin" in data:
+        invoke_url = base_invoke_url + "/topics/12aa97d84d77.pin"
         payload = json.dumps({
             "records": [{     
                 "value": {
@@ -90,6 +90,7 @@ def post_to_api(data):
         print(response.status_code)
     
     if "geo" in data:
+        invoke_url = base_invoke_url + "/topics/12aa97d84d77.geo"
         payload = json.dumps({
             "records": [{     
                 "value": {
@@ -105,6 +106,7 @@ def post_to_api(data):
         print(response.status_code)
     
     if "user" in data:
+        invoke_url = base_invoke_url + "/topics/12aa97d84d77.user"
         payload = json.dumps({
             "records": [{     
                 "value": {
