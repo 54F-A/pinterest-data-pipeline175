@@ -14,7 +14,7 @@
 
 ## Overview: The Project Description
 
-This project is focused on creating a data pipeline for extracting and processing data from an AWS-hosted database, specifically dealing with Pinterest data. The pipeline selects random rows from multiple tables and prints them in an infinite loop. This project helps in understanding handling large datasets, data pipeline construction, database interaction, and real-time data processing using AWS and Kafka.
+This project is focused on creating a data pipeline for extracting and processing data from an AWS-hosted database, specifically dealing with Pinterest data. This project helps to understand handling large datasets, data pipeline construction, database interaction, and real-time data processing using AWS and Kafka.
 
 AWS resources were configured to support the pipeline's data flow; such as setting up an S3 bucket, creating a custom plugin & configuring MSK Connectors, to allow transfer of data between Kafka topics & an Amazon S3 bucket. These steps ensured that the data pipeline operates smoothly and integrates with AWS services for data storage and processing. The setup extracts random rows of data from an AWS-hosted database and sends them to Kafka topics via an API.
 
