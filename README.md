@@ -14,9 +14,49 @@
 
 ## Overview: The Project Description
 
-This project is focused on creating a data pipeline for extracting and processing data from an AWS-hosted database, specifically dealing with Pinterest data. This project helps to understand handling large datasets, data pipeline construction, database interaction, and real-time data processing using AWS and Kafka.
+This project involves the creation of a robust data pipeline designed for extracting and processing data from an AWS-hosted database, specifically focusing on Pinterest data. The pipeline is engineered to manage large datasets, construct efficient data pipelines, and integrate with real-time data processing tools using AWS and Kafka.
 
-AWS resources were configured to support the pipeline's data flow; such as setting up an S3 bucket, creating a custom plugin & configuring MSK Connectors, to allow transfer of data between Kafka topics & an Amazon S3 bucket. These steps ensured that the data pipeline operates smoothly and integrates with AWS services for data storage and processing. The setup extracts random rows of data from an AWS-hosted database and sends them to Kafka topics via an API.
+By leveraging Spark for data processing and AWS S3 for storage, the project ensures scalability and real-time data handling capabilities. The integration of Kafka for data transfer further enhances the pipeline's efficiency, making it a valuable tool for understanding and analysing large-scale data.
+
+__AWS Resource Configuration__:
+
+- S3 Bucket Setup
+
+- Custom Plugin Development & MSK Connectors
+
+__Data Extraction and Processing__:
+
+- Delta Table Reading
+
+- Mounting S3 Bucket
+
+__Data Loading__:
+
+- Loading JSON Data
+
+__Data Cleaning and Transformation__:
+
+- Coordinate Transformation
+
+- Column Management
+
+- Handling Missing and Inconsistent Data
+
+- Numeric Conversion
+
+- String Clean-up
+
+- Column Reordering
+
+- Name Concatenation
+
+- Data Type Conversion
+
+__Visualisation and Verification__:
+
+- Data Display
+
+- Data Schema Display
 
 ---
 
@@ -34,7 +74,17 @@ Follow these steps:
 
 - Ensure your db_creds.yaml file is correctly set up with your database credentials.
 
-- Run the data extraction script: __`python main.py`__
+- Grant permissions to the .pem file: __`chmod 400 /path/to/private_key.pem`__
+
+- Open a WSL (ubuntu) terminal & connect to the EC2 instance: __`ssh -i "<key_pair.pem>" <Public DNS>`__
+
+- Ensure that the client.properties & kafka-rest.properties are configured.
+
+- Navigte to the bin folder of the Confluent platform: __`cd confluent-7.2.0/bin/`__
+
+- Start the REST proxy: __`./kafka-rest-start /home/ec2-user/confluent-7.2.0/etc/kafka-rest/kafka-rest.properties`__
+
+- On a new terminal, run the data posting file: __`python user_posting_emulation.py`__
 
 ---
 
