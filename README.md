@@ -90,7 +90,7 @@ Follow these steps:
 
 ## File Structure of the Project
 
-### AWSDBConnector
+### AWSDBConnector:
 
 A class to handle AWS database connections.
 
