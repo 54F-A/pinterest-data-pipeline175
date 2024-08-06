@@ -23,6 +23,8 @@ By leveraging Spark for data processing and AWS S3 for storage, the project ensu
 
 Cleaned data from the dataframes using Spark on Databricks & used the Databricks platform to query the data. Specific transformations included replacing empty and irrelevant entries with None, ensuring numeric data types for relevant columns, and reordering columns for better organisation. For the Pinterest posts, this involved standardising follower counts, extracting save location paths, and renaming the index column. Geolocation data was enhanced by creating coordinate arrays and converting timestamps, while user data was streamlined by combining names and converting join dates.
 
+Created a DAG (Directed Acyclic Graph) for task automation & uploaded it to a folder in an S3 bucket. This DAG triggers a Databricks notebook to run on a daily schedule.
+
 ### AWS Data Pipeline Workflow
 
 __AWS Resource Configuration__:
@@ -219,23 +221,33 @@ __Pinterest Posts DF Cleaning Method__:
 
 __Geolocation DF Cleaning Method__:
 
-- `df_geo = df_geo.withColumn("coordinates", functions.array("latitude", "longitude"))`: Creates a new column 'coordinates' that contains an array based on the latitude and longitude columns
+- `df_geo = df_geo.withColumn("coordinates", functions.array("latitude", "longitude"))`: Creates a new column 'coordinates' that contains an array based on the latitude and longitude columns.
 
-- `df_geo = df_geo.drop("latitude", "longitude")`: Drop the latitude and longitude columns from the DataFrame
+- `df_geo = df_geo.drop("latitude", "longitude")`: Drop the latitude and longitude columns from the DataFrame.
 
-- `df_geo = df_geo.withColumn("timestamp", col("timestamp").cast("timestamp"))`: Convert the timestamp column from a string to a timestamp data type
+- `df_geo = df_geo.withColumn("timestamp", col("timestamp").cast("timestamp"))`: Convert the timestamp column from a string to a timestamp data type.
 
 -  `df_pin = df_pin.select()`: Reorder the DataFrame columns.
 
 __Users DF Cleaning Method__:
 
-- `df_user = df_user.withColumn("user_name", concat(col("first_name"), lit(" "), col("last_name")))`: Create a new column user_name that concatenates the information found in the first_name and last_name columns
+- `df_user = df_user.withColumn("user_name", concat(col("first_name"), lit(" "), col("last_name")))`: Create a new column user_name that concatenates the information found in the first_name and last_name columns.
 
-- `df_user = df_user.drop("first_name", "last_name")`: Drop the first_name and last_name columns from the DataFrame
+- `df_user = df_user.drop("first_name", "last_name")`: Drop the first_name and last_name columns from the DataFrame.
 
 - `df_user = df_user.withColumn("date_joined", col("date_joined").cast("timestamp"))`: Convert the date_joined column from a string to a timestamp data type
 
 - `df_pin = df_pin.select()`: Reorder the DataFrame columns.
+
+### Task Automation
+
+A DAG used to automate tasks from a Databricks notebook.
+
+__Airflow DAG Method__:
+
+- `'notebook_path': '<DATABRICKS NOTEBOOK>'`: The Databricks notebook that will run.
+
+- `schedule_interval='0 0 * * *'`: The task is scheduled to run daily.
 
 ---
 
