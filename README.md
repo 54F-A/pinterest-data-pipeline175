@@ -2,13 +2,14 @@
 
 ### Table of Contents:
 
-#### 1. [Overview: The Project Description](#1-overview-the-project-description)
-#### 2. [Installation & Usage Instructions](#2-installation--usage-instructions)
-#### 3. [File Structure of the Project](#3-file-structure-of-the-project)
-- #### [AWSDBConnector](#awsdbconnector)
-- #### [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics)
-- #### [Post Data to the API](#post-data-to-the-api)
-#### 4. [License Information](#4-license-information)
+#### 1. [Overview: The Project Description](#overview-the-project-description)
+#### 2. [Installation & Usage Instructions](#installation--usage-instructions)
+#### 3. [File Structure of the Project](#file-structure-of-the-project)
+- #### [AWSDBConnector](#awsdbconnector-1)
+- #### [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics-1)
+- #### [Post Data to the API](#post-data-to-the-api-1)
+- #### [Data Cleaning](#data-cleaning-1)
+#### 4. [License Information](#license-information)
 
 ---
 
@@ -173,6 +174,46 @@ __Method__:
 - `post_to_api(data)`: Sends the data to the API using the post_to_api(data) function.
 
 - `run_infinite_post_data_loop()`: Runs an infinite loop to select random rows from multiple database tables and posts them to the API.
+
+---
+
+### Data Cleaning:
+
+Cleans data from the pinterest posts, geolocation & users dataframes using Spark on Databricks.
+
+__Pinterest Posts DF Cleaning Method__:
+
+- `sleep(random.randrange(0, 2))`: Continuously runs, pausing for a random duration between 0 and 2 seconds in each iteration.
+
+- `df_pin = df_pin.na.replace([''], None)` & `df_pin = df_pin.na.replace([float('nan')], None)`: Replaces empty entries & entries with no relevant data.
+
+- `df_pin = df_pin.withColumn("follower_count", col("follower_count").cast("int"))`: Ensures every entry for follower_count is an integer.
+
+- `df_pin = df_pin.withColumn("save_location", regexp_replace("save_location", "Local save in ", ""))`: Cleans the data in the save_location column to include only the save location path.
+
+- `df_pin = df_pin.withColumnRenamed("index", "ind")`: Renames the index column to ind.
+
+-  `df_pin = df_pin.select()`: Reorder the DataFrame columns.
+
+__Geolocation DF Cleaning Method__:
+
+- `df_geo = df_geo.withColumn("coordinates", functions.array("latitude", "longitude"))`: Creates a new column 'coordinates' that contains an array based on the latitude and longitude columns
+
+- `df_geo = df_geo.drop("latitude", "longitude")`: Drop the latitude and longitude columns from the DataFrame
+
+- `df_geo = df_geo.withColumn("timestamp", col("timestamp").cast("timestamp"))`: Convert the timestamp column from a string to a timestamp data type
+
+-  `df_pin = df_pin.select()`: Reorder the DataFrame columns.
+
+__Users DF Cleaning Method__:
+
+- `df_user = df_user.withColumn("user_name", concat(col("first_name"), lit(" "), col("last_name")))`: Create a new column user_name that concatenates the information found in the first_name and last_name columns
+
+- `df_user = df_user.drop("first_name", "last_name")`: Drop the first_name and last_name columns from the DataFrame
+
+- `df_user = df_user.withColumn("date_joined", col("date_joined").cast("timestamp"))`: Convert the date_joined column from a string to a timestamp data type
+
+- `df_pin = df_pin.select()`: Reorder the DataFrame columns.
 
 ---
 
