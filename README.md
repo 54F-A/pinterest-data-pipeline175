@@ -3,6 +3,8 @@
 ### Table of Contents:
 
 #### 1. [Overview: The Project Description](#overview-the-project-description)
+- #### [AWS Data Pipeline Workflow](#aws-data-pipeline-workflow-1)
+- #### [AWS Kafka Setup and Integration](#aws-kafka-setup-and-integration-1)
 #### 2. [Installation & Usage Instructions](#installation--usage-instructions)
 #### 3. [File Structure of the Project](#file-structure-of-the-project)
 - #### [AWSDBConnector](#awsdbconnector-1)
@@ -18,6 +20,10 @@
 This project involves the creation of a robust data pipeline designed for extracting and processing data from an AWS-hosted database, specifically focusing on Pinterest data. The pipeline is engineered to manage large datasets, construct efficient data pipelines, and integrate with real-time data processing tools using AWS and Kafka.
 
 By leveraging Spark for data processing and AWS S3 for storage, the project ensures scalability and real-time data handling capabilities. The integration of Kafka for data transfer further enhances the pipeline's efficiency, making it a valuable tool for understanding and analysing large-scale data.
+
+Cleaned data from the dataframes using Spark on Databricks & used the Databricks platform to query the data. Specific transformations included replacing empty and irrelevant entries with None, ensuring numeric data types for relevant columns, and reordering columns for better organisation. For the Pinterest posts, this involved standardising follower counts, extracting save location paths, and renaming the index column. Geolocation data was enhanced by creating coordinate arrays and converting timestamps, while user data was streamlined by combining names and converting join dates.
+
+### AWS Data Pipeline Workflow
 
 __AWS Resource Configuration__:
 
@@ -59,6 +65,22 @@ __Visualisation and Verification__:
 
 - Data Schema Display
 
+### AWS Kafka Setup and Integration
+
+- Setup Kafka on EC2 Client
+
+- Configure S3 bucket in AWS (for storing topics)
+
+- Download Confluent (to manage & process data streams)
+
+- Setup MSK Connect (to connect Confluent to the S3 bucket)
+
+- Deploy REST API in AWS (so the EC2 client can make HTTP POST requests) 
+
+- Start the Kafka REST Proxy in the EC2 client
+
+- Post data using Python Script
+
 ---
 
 ## Installation & Usage Instructions
@@ -91,7 +113,7 @@ Follow these steps:
 
 ## File Structure of the Project
 
-### AWSDBConnector:
+### AWSDBConnector
 
 A class to handle AWS database connections.
 
@@ -119,7 +141,7 @@ __Method__:
 
 ---
 
-### Data Transfer to Kafka Topics:
+### Data Transfer to Kafka Topics
 
 Extracts data from the following tables:
 
@@ -145,7 +167,7 @@ Sends a POST request to the appropriate Kafka topic endpoint with the constructe
 
 ---
 
-### Post Data to the API:
+### Post Data to the API
 
 Selects random rows from database tables and posts them to the API.
 
@@ -177,7 +199,7 @@ __Method__:
 
 ---
 
-### Data Cleaning:
+### Data Cleaning
 
 Cleans data from the pinterest posts, geolocation & users dataframes using Spark on Databricks.
 
