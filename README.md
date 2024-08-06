@@ -11,6 +11,7 @@
 - #### [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics-1)
 - #### [Post Data to the API](#post-data-to-the-api-1)
 - #### [Data Cleaning](#data-cleaning-1)
+- #### [Task Automation](#task-automation-1)
 #### 4. [License Information](#license-information)
 
 ---
