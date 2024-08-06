@@ -17,7 +17,7 @@
 
 ## Overview: The Project Description
 
-This project involves the creation of a robust data pipeline designed for extracting and processing data from an AWS-hosted database, specifically focusing on Pinterest data. The pipeline is engineered to manage large datasets, construct efficient data pipelines, and integrate with real-time data processing tools using AWS and Kafka.
+This project involves the creation of a robust data pipeline designed for extracting and processing data from an AWS-hosted database, specifically focusing on Pinterest data. The pipeline is engineered to manage large datasets and integrate with real-time data processing tools using AWS and Kafka.
 
 By leveraging Spark for data processing and AWS S3 for storage, the project ensures scalability and real-time data handling capabilities. The integration of Kafka for data transfer further enhances the pipeline's efficiency, making it a valuable tool for understanding and analysing large-scale data.
 
