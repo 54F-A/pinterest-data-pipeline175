@@ -3,17 +3,17 @@
 ## Table of Contents:
 
 ### __1. [Overview: The Project Description](#overview-the-project-description)__
-- ### 1.1 [AWS Data Pipeline Workflow](#aws-data-pipeline-workflow-1)
-- ### 1.2 [AWS Kafka Setup and Integration (Batch Processing)](#aws-kafka-setup-and-integration-batch-processing-1)
+- ### 1.1 [AWS Data Pipeline Workflow](#aws-data-pipeline-workflow)
+- ### 1.2 [AWS Kafka Setup and Integration (Batch Processing)](#aws-kafka-setup-and-integration-batch-processing)
 ### __2. [Installation & Usage Instructions](#installation--usage-instructions)__
 ### __3. [File Structure of the Project](#file-structure-of-the-project)__
-- ### 3.1 [Pinterest Infastructure](#pinterest-infastructure-1)
-- #### _3.1.1 [AWSDBConnector](#awsdbconnector-1)_
-- ### 3.2 [Batch Processing](#batch-processing-1)
-- #### _3.2.1 [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics-1)_
-- #### _3.2.2 [Post Data to the API](#post-data-to-the-api-1)_
-- #### _3.2.3 [Data Cleaning](#data-cleaning-1)_
-- #### _3.2.4 [Task Automation](#task-automation-1)_
+- ### 3.1 [Pinterest Infastructure](#pinterest-infastructure)
+- #### _3.1.1 [AWSDBConnector](#awsdbconnector)_
+- ### 3.2 [Batch Processing](#batch-processing)
+- #### _3.2.1 [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics)_
+- #### _3.2.2 [Post Data to the API](#post-data-to-the-api)_
+- #### _3.2.3 [Data Cleaning](#data-cleaning)_
+- #### _3.2.4 [Task Automation](#task-automation)_
 ### __4. [License Information](#license-information)__
 
 ---
