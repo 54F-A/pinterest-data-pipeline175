@@ -3,13 +3,13 @@
 ## Table of Contents:
 
 ### __1. [Overview: The Project Description](#overview-the-project-description)__
-- ### 1.1 [AWS Data Pipeline Workflow](#aws-data-pipeline-workflow)
-- ### 1.2 [AWS Kafka Setup and Integration (Batch Processing)](#aws-kafka-setup-and-integration-batch-processing)
+- #### 1.1 [AWS Data Pipeline Workflow](#aws-data-pipeline-workflow)
+- #### 1.2 [AWS Kafka Setup and Integration (Batch Processing)](#aws-kafka-setup-and-integration-batch-processing)
 ### __2. [Installation & Usage Instructions](#installation--usage-instructions)__
 ### __3. [File Structure of the Project](#file-structure-of-the-project)__
-- ### 3.1 [Pinterest Infastructure](#pinterest-infastructure)
+- #### 3.1 [Pinterest Infastructure](#pinterest-infastructure)
 - #### _3.1.1 [AWSDBConnector](#awsdbconnector)_
-- ### 3.2 [Batch Processing](#batch-processing)
+- #### 3.2 [Batch Processing](#batch-processing)
 - #### _3.2.1 [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics)_
 - #### _3.2.2 [Post Data to the API](#post-data-to-the-api)_
 - #### _3.2.3 [Data Cleaning](#data-cleaning)_
@@ -228,7 +228,7 @@ __Pinterest Posts DF Cleaning Method__:
 
 - `df_pin = df_pin.withColumnRenamed("index", "ind")`: Renames the index column to ind.
 
--  `df_pin = df_pin.select()`: Reorder the DataFrame columns.
+-  `df_pin = df_pin.select()`: Reorders the DataFrame columns.
 
 __Geolocation DF Cleaning Method__:
 
@@ -238,7 +238,7 @@ __Geolocation DF Cleaning Method__:
 
 - `df_geo = df_geo.withColumn("timestamp", col("timestamp").cast("timestamp"))`: Convert the timestamp column from a string to a timestamp data type.
 
--  `df_pin = df_pin.select()`: Reorder the DataFrame columns.
+-  `df_pin = df_pin.select()`: Reorders the DataFrame columns.
 
 __Users DF Cleaning Method__:
 
@@ -248,7 +248,7 @@ __Users DF Cleaning Method__:
 
 - `df_user = df_user.withColumn("date_joined", col("date_joined").cast("timestamp"))`: Convert the date_joined column from a string to a timestamp data type
 
-- `df_pin = df_pin.select()`: Reorder the DataFrame columns.
+- `df_pin = df_pin.select()`: Reorders the DataFrame columns.
 
 ---
 
