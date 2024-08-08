@@ -63,6 +63,12 @@ new_connector = AWSDBConnector()
 
 
 def post_to_api(data):
+    """
+    Posts data to an API endpoint.
+
+    Args:
+        data (dict): A dictionary containing the data to be posted.
+    """
     headers = {'Content-Type': 'application/vnd.kafka.json.v2+json'}
     base_invoke_url = "https://6oqdd8f045.execute-api.us-east-1.amazonaws.com/test"
 
@@ -122,7 +128,16 @@ def post_to_api(data):
         print(response.status_code)
 
 def run_infinite_post_data_loop():
-    """Runs infinite loop that selects random rows from multiple database tables and prints them.
+    """
+    Continuously runs an infinite loop retrieving random rows from 3 database tables & posting the data to an API.
+
+    Performs the following:
+    1. Sleeps for a random duration between 0 and 2 seconds.
+    2. Selects random row index from range 0 to 11,000.
+    4. Retrieves a row of data from 3 tables.
+    5. Converts the retrieved rows to dictionaries.
+    6. Compiles the data into a dictionary with keys: 'pin', 'geo', and 'user'.
+    8. Posts the compiled data to an API.
     """
     while True:
         sleep(random.randrange(0, 2))
