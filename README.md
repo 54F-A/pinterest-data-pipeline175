@@ -1,17 +1,19 @@
 # Pinterest Data Pipeline
 
-### Table of Contents:
+## Table of Contents:
 
 #### 1. [Overview: The Project Description](#overview-the-project-description)
-- #### [AWS Data Pipeline Workflow](#aws-data-pipeline-workflow-1)
-- #### [AWS Kafka Setup and Integration](#aws-kafka-setup-and-integration-1)
+- #### 1.1 [AWS Data Pipeline Workflow](#aws-data-pipeline-workflow-1)
+- #### 1.2 [AWS Kafka Setup and Integration (Batch Processing)](#aws-kafka-setup-and-integration-batch-processing-1)
 #### 2. [Installation & Usage Instructions](#installation--usage-instructions)
 #### 3. [File Structure of the Project](#file-structure-of-the-project)
-- #### [AWSDBConnector](#awsdbconnector-1)
-- #### [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics-1)
-- #### [Post Data to the API](#post-data-to-the-api-1)
-- #### [Data Cleaning](#data-cleaning-1)
-- #### [Task Automation](#task-automation-1)
+- #### 3.1 [Pinterest Infastructure](#pinterest-infastructure-1)
+- #### 3.1.1 [AWSDBConnector](#awsdbconnector-1)
+- #### 3.2 [Batch Processing](#batch-processing-1)
+- #### 3.2.1 [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics-1)
+- #### 3.2.2 [Post Data to the API](#post-data-to-the-api-1)
+- #### 3.2.3 [Data Cleaning](#data-cleaning-1)
+- #### 3.2.4 [Task Automation](#task-automation-1)
 #### 4. [License Information](#license-information)
 
 ---
@@ -25,6 +27,8 @@ By leveraging Spark for data processing and AWS S3 for storage, the project ensu
 Cleaned data from the dataframes using Spark on Databricks & used the Databricks platform to query the data. Specific transformations included replacing empty and irrelevant entries with None, ensuring numeric data types for relevant columns, and reordering columns for better organisation. For the Pinterest posts, this involved standardising follower counts, extracting save location paths, and renaming the index column. Geolocation data was enhanced by creating coordinate arrays and converting timestamps, while user data was streamlined by combining names and converting join dates.
 
 Created a DAG (Directed Acyclic Graph) for task automation & uploaded it to a folder in an S3 bucket. This DAG triggers a Databricks notebook to run on a daily schedule.
+
+---
 
 ### AWS Data Pipeline Workflow
 
@@ -68,7 +72,9 @@ __Visualisation and Verification__:
 
 - Data Schema Display
 
-### AWS Kafka Setup and Integration
+---
+
+### AWS Kafka Setup and Integration (Batch Processing)
 
 - Setup Kafka on EC2 Client
 
@@ -116,6 +122,8 @@ Follow these steps:
 
 ## File Structure of the Project
 
+### Pinterest Infastructure
+
 ### AWSDBConnector
 
 A class to handle AWS database connections.
@@ -143,6 +151,8 @@ __Method__:
 - `create_db_connector(self)`: Creates a SQLAlchemy engine for connecting to the database.
 
 ---
+
+### Batch Processing
 
 ### Data Transfer to Kafka Topics
 
@@ -239,6 +249,8 @@ __Users DF Cleaning Method__:
 - `df_user = df_user.withColumn("date_joined", col("date_joined").cast("timestamp"))`: Convert the date_joined column from a string to a timestamp data type
 
 - `df_pin = df_pin.select()`: Reorder the DataFrame columns.
+
+---
 
 ### Task Automation
 
