@@ -178,8 +178,6 @@ __API Request__:
 
 Sends a POST request to the appropriate Kafka topic endpoint with the constructed payload.
 
----
-
 ### Post Data to the API
 
 Selects random rows from database tables and posts them to the API.
