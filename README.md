@@ -2,31 +2,31 @@
 
 ## Table of Contents:
 
-#### 1. [Overview: The Project Description](#overview-the-project-description)
+### __1. [Overview: The Project Description](#overview-the-project-description)__
 - #### 1.1 [AWS Data Pipeline Workflow](#aws-data-pipeline-workflow-1)
 - #### 1.2 [AWS Kafka Setup and Integration (Batch Processing)](#aws-kafka-setup-and-integration-batch-processing-1)
-#### 2. [Installation & Usage Instructions](#installation--usage-instructions)
-#### 3. [File Structure of the Project](#file-structure-of-the-project)
-- #### 3.1 [Pinterest Infastructure](#pinterest-infastructure-1)
+### __2. [Installation & Usage Instructions](#installation--usage-instructions)__
+### __3. [File Structure of the Project](#file-structure-of-the-project)__
+- ### 3.1 [Pinterest Infastructure](#pinterest-infastructure-1)
 - #### 3.1.1 [AWSDBConnector](#awsdbconnector-1)
-- #### 3.2 [Batch Processing](#batch-processing-1)
+- ### 3.2 [Batch Processing](#batch-processing-1)
 - #### 3.2.1 [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics-1)
 - #### 3.2.2 [Post Data to the API](#post-data-to-the-api-1)
 - #### 3.2.3 [Data Cleaning](#data-cleaning-1)
 - #### 3.2.4 [Task Automation](#task-automation-1)
-#### 4. [License Information](#license-information)
+### __4. [License Information](#license-information)__
 
 ---
 
 ## Overview: The Project Description
 
-This project involves the creation of a robust data pipeline designed for extracting and processing data from an AWS-hosted database, specifically focusing on Pinterest data. The pipeline is engineered to manage large datasets and integrate with real-time data processing tools using AWS and Kafka.
+This project involves the creation of a robust This is <span style="color: #1E90FF;">__data pipeline__</span> designed for extracting and processing data from an <span style="color: #1E90FF;">__AWS-hosted database__</span>, specifically focusing on <span style="color: #1E90FF;">__Pinterest data__</span>. The pipeline is engineered to manage <span style="color: #1E90FF;">__large datasets__</span> and integrate with real-time data processing tools using <span style="color: #1E90FF;">__AWS__</span> and <span style="color: #1E90FF;">__Kafka__</span>.
 
-By leveraging Spark for data processing and AWS S3 for storage, the project ensures scalability and real-time data handling capabilities. The integration of Kafka for data transfer further enhances the pipeline's efficiency, making it a valuable tool for understanding and analysing large-scale data.
+By leveraging <span style="color: #1E90FF;">__Spark__</span> for data processing and <span style="color: #1E90FF;">__AWS S3__</span> for storage, the project ensures <span style="color: #1E90FF;">__scalability__</span> and real-time <span style="color: #1E90FF;">__data handling__</span> capabilities. The integration of <span style="color: #1E90FF;">__Kafka__</span> for <span style="color: #1E90FF;">__data transfer__</span> further enhances the pipeline's efficiency, making it a valuable tool for understanding and analysing <span style="color: #1E90FF;">__large-scale data__</span>.
 
-Cleaned data from the dataframes using Spark on Databricks & used the Databricks platform to query the data. Specific transformations included replacing empty and irrelevant entries with None, ensuring numeric data types for relevant columns, and reordering columns for better organisation. For the Pinterest posts, this involved standardising follower counts, extracting save location paths, and renaming the index column. Geolocation data was enhanced by creating coordinate arrays and converting timestamps, while user data was streamlined by combining names and converting join dates.
+Cleaned data from the dataframes using <span style="color: #1E90FF;">__Spark__</span> on <span style="color: #1E90FF;">__Databricks__</span> & used the Databricks platform to query the data. Specific <span style="color: #1E90FF;">__transformations__</span> included replacing empty and irrelevant entries with None, ensuring numeric data types for relevant columns, and reordering columns for better organisation. For the Pinterest posts, this involved standardising follower counts, extracting save location paths, and renaming the index column. Geolocation data was enhanced by creating coordinate arrays and converting timestamps, while user data was streamlined by combining names and converting join dates.
 
-Created a DAG (Directed Acyclic Graph) for task automation & uploaded it to a folder in an S3 bucket. This DAG triggers a Databricks notebook to run on a daily schedule.
+Created a <span style="color: #1E90FF;">__DAG (Directed Acyclic Graph)__</span> for <span style="color: #1E90FF;">__task automation__</span> & uploaded it to a folder in an <span style="color: #1E90FF;">__S3 bucket__</span>. This <span style="color: #1E90FF;">__DAG__</span> triggers a <span style="color: #1E90FF;">__Databricks notebook__</span> to run on a daily schedule.
 
 ---
 
