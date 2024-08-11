@@ -11,8 +11,10 @@
 - #### _3.1.1 [AWSDBConnector](#awsdbconnector)_
 - #### _3.1.1 [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics)_
 - #### _3.1.2 [Post Data to the API](#post-data-to-the-api)_
-- #### _3.1.3 [Data Cleaning](#data-cleaning)_
+- #### _3.1.3 [Batch Data Cleaning](#batch-data-cleaning)_
 - #### _3.1.4 [Task Automation](#task-automation)_
+- #### __3.1 [Stream Processing](#stream-processing)__
+- #### _3.1.3 [Stream Data Cleaning](#stream-data-cleaning)_
 ### __4. [License Information](#license-information)__
 
 ---
@@ -88,6 +90,28 @@ __Visualisation and Verification__:
 - Start the Kafka REST Proxy in the EC2 client
 
 - Post data using Python Script
+
+---
+
+### AWS Kinesis Setup and Integration (Streaming Processing)
+
+- Create Kinesis Data Streams in AWS
+
+- Configure REST API in AWS (using Kinesis access role ARN)
+
+- Create a read file in Databricks for AWS credentials (Access key & Secret key)
+
+- Create a cleaning file in Databricks for the data streams
+
+- Create a write file in Databricks save the data to Delta tables
+
+- Deploy REST API in AWS (so the EC2 client can make HTTP POST requests) 
+
+- Start the Kafka REST Proxy in the EC2 client
+
+- Post data using a modified streaming Python Script
+
+- Run the read file, then clean the data and, write it to the Delta tables
 
 ---
 
@@ -209,9 +233,9 @@ __Method__:
 
 ---
 
-### Data Cleaning
+### Batch Data Cleaning
 
-Cleans data from the pinterest posts, geolocation & users dataframes using Spark on Databricks.
+Cleans data from the pinterest posts, geolocation & users dataframes using Spark.
 
 __Pinterest Posts DF Cleaning Method__:
 
@@ -225,7 +249,7 @@ __Pinterest Posts DF Cleaning Method__:
 
 - `df_pin = df_pin.withColumnRenamed("index", "ind")`: Renames the index column to ind.
 
--  `df_pin = df_pin.select()`: Reorders the DataFrame columns.
+-  `df_pin = df_pin.select(...)`: Reorders the DataFrame columns.
 
 __Geolocation DF Cleaning Method__:
 
@@ -235,7 +259,7 @@ __Geolocation DF Cleaning Method__:
 
 - `df_geo = df_geo.withColumn("timestamp", col("timestamp").cast("timestamp"))`: Convert the timestamp column from a string to a timestamp data type.
 
--  `df_pin = df_pin.select()`: Reorders the DataFrame columns.
+-  `df_geo = df_geo.select(...)`: Reorders the DataFrame columns.
 
 __Users DF Cleaning Method__:
 
@@ -245,7 +269,7 @@ __Users DF Cleaning Method__:
 
 - `df_user = df_user.withColumn("date_joined", col("date_joined").cast("timestamp"))`: Convert the date_joined column from a string to a timestamp data type
 
-- `df_pin = df_pin.select()`: Reorders the DataFrame columns.
+- `df_user = df_user.select(...)`: Reorders the DataFrame columns.
 
 ---
 
@@ -258,6 +282,46 @@ __Airflow DAG Method__:
 - `'notebook_path': '<DATABRICKS NOTEBOOK>'`: The Databricks notebook that will run.
 
 - `schedule_interval='0 0 * * *'`: The task is scheduled to run daily.
+
+---
+
+## Stream Processing
+
+### Stream Data Cleaning
+
+Cleans data from the Pinterest posts, geolocation & users streamed dataframes using Spark.
+
+__Pinterest Posts DF Cleaning Method__:
+
+- `df_pin = clean_struct_fields(df_pin, "data", fields_to_clean)`: Replaces empty entries & entries with no relevant data.
+
+- `df_pin = df_pin.withColumn("data", struct(...))`: Applies transformations to the struct field "data".
+
+- `col("data.index").alias("ind")`: Renames the index column to ind.
+
+- `process_follower_count(col("data.follower_count")).alias("follower_count")`: Ensures every entry for follower_count is an integer.
+
+- `regexp_replace(col("data.save_location"), "Local save in ", "").alias("save_location")`: Cleans the data in the save_location column to include only the save location path.
+
+- `process_downloaded(col("data.downloaded")).alias("downloaded")`: Ensures every entry for download is an integer.
+
+- `df_pin = df_pin.select(...)`: Reorders the DataFrame columns.
+
+__Geolocation DF Cleaning Method__:
+
+- `df_geo = df_geo.withColumn("data", struct(...))`: Applies transformations to the struct field "data".
+
+- `col("data.timestamp").cast(TimestampType()).alias("timestamp")`: Convert the timestamp column from a string to a timestamp data type.
+
+- `process_latitude(col("data.latitude")).alias("latitude")`: Ensures every entry for latitude is an integer.
+
+- `process_longitude(col("data.longitude")).alias("longitude")`: Ensures every entry for longitude is an integer.
+
+- `array(col("data.latitude"), col("data.longitude")).alias("coordinates")`: Creates a new coordinates column that contains an array of the latitude and longitude columns.
+
+-  `df_geo = df_geo.select(...)`: Reorders the DataFrame columns.
+
+__Users DF Cleaning Method__:
 
 ---
 
