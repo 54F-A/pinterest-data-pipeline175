@@ -5,16 +5,18 @@
 ### __1. [Overview: The Project Description](#overview-the-project-description)__
 - #### __1.1 [AWS Data Pipeline Workflow](#aws-data-pipeline-workflow)__
 - #### __1.2 [AWS Kafka Setup and Integration (Batch Processing)](#aws-kafka-setup-and-integration-batch-processing)__
+- #### __1.2 [AWS Kinesis Setup and Integration (Streaming Processing)](#aws-kinesis-setup-and-integration-streaming-processing)__
 ### __2. [Installation & Usage Instructions](#installation--usage-instructions)__
 ### __3. [File Structure of the Project](#file-structure-of-the-project)__
-- #### __3.1 [Batch Processing](#batch-processing)__
-- #### _3.1.1 [AWSDBConnector](#awsdbconnector)_
-- #### _3.1.1 [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics)_
-- #### _3.1.2 [Post Data to the API](#post-data-to-the-api)_
-- #### _3.1.3 [Batch Data Cleaning](#batch-data-cleaning)_
-- #### _3.1.4 [Task Automation](#task-automation)_
-- #### __3.1 [Stream Processing](#stream-processing)__
-- #### _3.1.3 [Stream Data Cleaning](#stream-data-cleaning)_
+- #### __3.1 [AWSDBConnector](#awsdbconnector)__
+- #### __3.2 [Batch Processing](#batch-processing)__
+- #### _3.2.1 [Data Transfer to Kafka Topics](#data-transfer-to-kafka-topics)_
+- #### _3.2.2 [Post Data to the API](#post-data-to-the-api)_
+- #### _3.2.3 [Batch Data Cleaning](#batch-data-cleaning)_
+- #### _3.2.4 [Task Automation](#task-automation)_
+- #### __3.3 [Stream Processing](#stream-processing)__
+- #### _3.3.1 [Post Data to Kinesis Streams](#post-data-to-kinesis-streams)_
+- #### _3.3.2 [Stream Data Cleaning](#stream-data-cleaning)_
 ### __4. [License Information](#license-information)__
 
 ---
@@ -145,8 +147,6 @@ Follow these steps:
 
 ## File Structure of the Project
 
-## Batch Processing
-
 ### AWSDBConnector
 
 A class to handle AWS database connections.
@@ -174,6 +174,8 @@ __Method__:
 - `create_db_connector(self)`: Creates a SQLAlchemy engine for connecting to the database.
 
 ---
+
+## Batch Processing
 
 ### Data Transfer to Kafka Topics
 
@@ -227,7 +229,7 @@ __Method__:
 
 - `data = {"pin": pin_result, "geo": geo_result, "user": user_result}`: Combines the extracted data into a dictionary with keys "pin", "geo", and "user".
 
-- `post_to_api(data)`: Sends the data to the API using the post_to_api(data) function.
+- `post_to_api(data)`: Sends data via a POST request to the API based on the presence of keys ("pin", "geo", "user") in the data dictionary.
 
 - `run_infinite_post_data_loop()`: Runs an infinite loop to select random rows from multiple database tables and posts them to the API.
 
@@ -286,6 +288,28 @@ __Airflow DAG Method__:
 ---
 
 ## Stream Processing
+
+### Post Data to Kinesis Streams
+
+Selects random rows from database tables and posts them to specific Kinesis Streams.
+
+__Method__:
+
+- `if "pin" in data`: Checks if the "pin" key exists in the data dictionary.
+
+- `invoke_url = base_invoke_url + "/test/streams/streaming-12aa97d84d77-pin/record"`: Constructs the full API URL for the "pin" stream.
+
+- `partition_key = 'partition-1'`: Defines the partition key for the "pin" stream.
+
+- `payload = {...}`: Constructs the payload for the "pin" stream.
+
+- `response = requests.put(invoke_url, headers=headers, json=payload)`: Sends a PUT request to the Kinesis API with the constructed payload.
+
+- The same is done for the "geo" & "user" stream.
+
+- `post_to_kinesis(data)`: Sends data via a PUT request to Kinesis streams based on the presence of keys ("pin", "geo", "user") in the data dictionary.
+
+---
 
 ### Stream Data Cleaning
 
