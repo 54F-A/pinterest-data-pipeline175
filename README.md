@@ -31,6 +31,8 @@ Cleaned data from the dataframes using <u>__Spark__</u> on <u>__Databricks__</u>
 
 Created a <u>__DAG (Directed Acyclic Graph)__</u> for <u>__task automation__</u> & uploaded it to a folder in an <u>__S3 bucket__</u>. This <u>__DAG__</u> triggers a <u>__Databricks notebook__</u> to run on a daily schedule.
 
+![Data-Pipeline-Image](data-pinterest-pipeline.jpg)
+
 ---
 
 ### AWS Data Pipeline Workflow
