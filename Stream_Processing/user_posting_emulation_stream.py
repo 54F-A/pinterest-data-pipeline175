@@ -1,63 +1,9 @@
-from datetime import datetime
-from multiprocessing import Process
+from db_connector import AWSDBConnector 
 from sqlalchemy import text
 from time import sleep
-import boto3
 import json
 import random
 import requests
-import sqlalchemy
-import yaml
-
-
-random.seed(100)
-
-
-class AWSDBConnector:
-    """A class to handle AWS database connections.
-
-    Attributes:
-        config (dict): Configuration parameters loaded from the credentials file.
-        HOST (str): Database host address.
-        USER (str): Database username.
-        PASSWORD (str): Database password.
-        DATABASE (str): Database name.
-        PORT (int): Database port.
-    """
-
-    def __init__(self, creds_file='db_creds.yaml'):
-        """Initializes the AWSDBConnector instance.
-
-        Args:
-            creds_file (str): The path to the database credentials YAML file.
-        """
-        self.config = self.load_config(creds_file)
-        self.HOST = self.config['HOST']
-        self.USER = self.config['USER']
-        self.PASSWORD = self.config['PASSWORD']
-        self.DATABASE = self.config['DATABASE']
-        self.PORT = self.config['PORT']
-    
-    def load_config(self, creds_file):
-        """Loads database configuration from a YAML file.
-
-        Args:
-            creds_file (str): The path to the database credentials YAML file.
-        Returns:
-            dict: The configuration parameters.
-        """
-        with open(creds_file, 'r') as file:
-            config = yaml.safe_load(file)
-        return config
-        
-    def create_db_connector(self):
-        """Creates a SQLAlchemy engine for connecting to the database.
-
-        Returns:
-            sqlalchemy.engine.Engine: The SQLAlchemy engine for the database connection.
-        """
-        engine = sqlalchemy.create_engine(f"mysql+pymysql://{self.USER}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.DATABASE}?charset=utf8mb4")
-        return engine
 
 
 new_connector = AWSDBConnector()
@@ -137,53 +83,52 @@ def post_to_kinesis(data):
         print(response.status_code)
         print(response.text)
 
+def extract_row_from_db(connection, table_name, row_index):
+    """
+    Extracts a single row from the specified table by row index.
+    
+    Args:
+        connection: The database connection object.
+        table_name (str): The name of the table to query.
+        row_index (int): The index of the row to retrieve.
+
+    Returns:
+        dict: The retrieved row as a dictionary.
+    """
+    query_string = text(f"SELECT * FROM {table_name} LIMIT {row_index}, 1")
+    selected_row = connection.execute(query_string)
+    result = None
+    
+    for row in selected_row:
+        result = dict(row._mapping)
+    
+    return result
+
 def run_infinite_post_data_loop():
     """
     Continuously runs an infinite loop retrieving random rows from 3 database tables & posting the data to an API.
-
+    
     Performs the following:
     1. Sleeps for a random duration between 0 and 2 seconds.
-    2. Selects random row index from range 0 to 11,000.
-    4. Retrieves a row of data from 3 tables.
-    5. Converts the retrieved rows to dictionaries.
-    6. Compiles the data into a dictionary with keys: 'pin', 'geo', and 'user'.
-    8. Posts the compiled data to an API.
+    2. Selects a random row index from the range 0 to 11,000.
+    3. Retrieves a row of data from 3 tables.
+    4. Converts the retrieved rows to dictionaries.
+    5. Compiles the data into a dictionary with keys: 'pin', 'geo', and 'user'.
+    6. Posts the compiled data to an API.
     """
-    engine = new_connector.create_db_connector() 
-    
     while True:
-        sleep(random.randrange(0, 2))
+        sleep(random.uniform(0, 2))
         random_row = random.randint(0, 11000)
-        data = {"pin": None, "geo": None, "user": None}
+        engine = new_connector.create_db_connector()
 
         with engine.connect() as connection:
-            
-            pin_string = text(f"SELECT * FROM pinterest_data LIMIT {random_row}, 1")
-            pin_selected_row = connection.execute(pin_string)
-            pin_result = None
+            pin_result = extract_row_from_db(connection, 'pinterest_data', random_row)
+            geo_result = extract_row_from_db(connection, 'geolocation_data', random_row)
+            user_result = extract_row_from_db(connection, 'user_data', random_row)
 
-            for row in pin_selected_row:
-                pin_result = dict(row._mapping)
-
-            geo_string = text(f"SELECT * FROM geolocation_data LIMIT {random_row}, 1")
-            geo_selected_row = connection.execute(geo_string)
-            geo_result = None
-
-            for row in geo_selected_row:
-                geo_result = dict(row._mapping)
-
-            user_string = text(f"SELECT * FROM user_data LIMIT {random_row}, 1")
-            user_selected_row = connection.execute(user_string)
-            user_result = None
-            
-            for row in user_selected_row:
-                user_result = dict(row._mapping)
-            
-            if pin_result:
-                data = {"pin": pin_result, "geo": geo_result, "user": user_result}
-                post_to_kinesis(data)
-            else:
-                print("No valid pin data found. Skipping post to Kinesis.")
+            data = {"pin": pin_result, "geo": geo_result, "user": user_result}
+            print(data)
+            post_to_kinesis(data)
 
 if __name__ == "__main__":
     run_infinite_post_data_loop()

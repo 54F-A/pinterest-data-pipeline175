@@ -1,5 +1,5 @@
 from airflow import DAG
-from airflow.providers.databricks.operators.databricks import DatabricksSubmitRunOperator, DatabricksRunNowOperator
+from airflow.providers.databricks.operators.databricks import DatabricksSubmitRunOperator
 from datetime import datetime, timedelta 
 
 
@@ -34,7 +34,6 @@ with DAG(
 
     opr_submit_run = DatabricksSubmitRunOperator(
         task_id='submit_run',
-        # the connection we set-up previously
         databricks_conn_id='databricks_default',
         existing_cluster_id='1108-162752-8okw8dgg',
         notebook_task=notebook_task
