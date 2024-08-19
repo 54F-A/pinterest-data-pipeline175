@@ -143,7 +143,7 @@ Follow these steps:
 
 - Start the REST proxy: __`./kafka-rest-start /home/ec2-user/confluent-7.2.0/etc/kafka-rest/kafka-rest.properties`__
 
-- On a new terminal, run the data posting file: __`python user_posting_emulation.py`__
+- On a new terminal, run the data posting file: __`python (Batch_Processing or Stream_Processing)/user_posting_emulation_(batch or stream).py`__
 
 ---
 
